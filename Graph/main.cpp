@@ -1,4 +1,4 @@
-// ╟рфрўр 1. ─рэю сшэрЁэюх фхЁхтю.═рщЄш яюффхЁхт№  ё ьръёшьры№э√ь ш ьшэшьры№э√ь ёююЄэю°хэшхь(т√ёюЄр / ўшёыю ышёЄ№хт).
+// Задача 1. Дано бинарное дерево.Найти поддеревья с максимальным и минимальным соотношением(высота / число листьев).
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -8,8 +8,8 @@
 #include<sstream>
 #include<vector>
 
-// ёЄЁєъЄєЁр Node яЁхфёЄрты хЄ ёюсющ юфшэ єчхы т сшэрЁэюь фхЁхтх ш тъы■ўрхЄ т ёхс  чэрўхэшх єчыр,
-// чэрўхэшх юЄэю°хэш (т√ёюЄр / ўшёыю ышёЄ№хт) ш єърчрЄхыш эр фтєї яюЄюьъют
+// структура Node представляет собой один узел в бинарном дереве и включает в себя значение узла,
+// значение отношения(высота / число листьев) и указатели на двух потомков
 struct Node {
 	int value;
     double ratio;
@@ -18,8 +18,8 @@ struct Node {
     Node() : left_child(nullptr), right_child(nullptr), value(0), ratio(0) {}
 };
 
-// фюсртыхэшх єчыр т фхЁхтю ё ъюэъЁхЄэ√ь чэрўхэшхь т ърўхёЄтх ярЁрьхЄЁр ЇєэъЎшш, т√яюыэ хЄё 
-// яЁюшчтюы№эю эр юёэютх ЇєэъЎшш rand()
+// добавление узла в дерево с конкретным значением в качестве параметра функции, выполняется
+// произвольно на основе функции rand()
 void add_node(int val, Node*& node) {
     if (node != nullptr) {
         switch (rand() % 2) {
@@ -37,7 +37,7 @@ void add_node(int val, Node*& node) {
 	}
 }
 
-// ЁрёўхЄ т√ёюЄ√ фхЁхтр, ъюЁэхь ъюЄюЁюую  ты хЄё  яхЁхфрээ√щ т ЇєэъЎш■ єърчрЄхы№ эр єчхы
+// расчет высоты дерева, корнем которого является переданный в функцию указатель на узел
 int tree_height(Node*& root) {
     if (root == nullptr) return -1;
 
@@ -47,7 +47,7 @@ int tree_height(Node*& root) {
     return std::max(left_height, right_height) + 1;
 }
 
-// ЁрёўхЄ ъюы-тр ышёЄ№хт фхЁхтр, ъюЁэхь ъюЄюЁюую  ты хЄё  яхЁхфрээ√щ т ЇєэъЎш■ єърчрЄхы№ эр єчхы
+// расчет кол-ва листьев дерева, корнем которого является переданный в функцию указатель на узел
 int leaves_count(Node*& root) {
     int leaves_cnt = 0;
     
@@ -59,7 +59,7 @@ int leaves_count(Node*& root) {
     return leaves_cnt + leaves_count(root->left_child) + leaves_count(root->right_child);
 }
 
-// ЁрёўхЄ юЄэю°хэш (т√ёюЄр / ўшёыю ышёЄ№хт) фы  тёхї яюффхЁхт№хт шёїюфэюую фхЁхтр
+// расчет отношения(высота / число листьев) для всех поддеревьев исходного дерева
 std::pair<double, double> max_min_ratios(Node*& root) {
     static double min_ratio = INT_MAX, max_ratio = 0;    
     if (root == nullptr) return { 0, 0 }; 
@@ -76,7 +76,7 @@ std::pair<double, double> max_min_ratios(Node*& root) {
     return { max_ratio, min_ratio };
 }
 
-// юўшёЄър т√фхыхээющ эр єърчрЄхыш єчыют фхЁхтр ярь Єш
+// очистка выделенной на указатели узлов дерева памяти
 void clear_tree(Node*& root) {
     if (root == nullptr) return;
 
@@ -85,7 +85,7 @@ void clear_tree(Node*& root) {
     delete root;
 }
 
-// яюшёъ фхЁхт№хт ё ьръё. ш ьшэ. ёююЄэю°хэш ьш(т√ёюЄр / ўшёыю ышёЄ№хт), р шьхээю шї ъюЁэхт√ї єчыют
+// поиск деревьев с макс. и мин. соотношениями(высота / число листьев), а именно их корневых узлов
 std::pair<Node*, Node*> find_max_min_ratio_nodes(Node*& root, double max_ratio, double min_ratio) {
     static Node* max_result = nullptr, *min_result = nullptr;
 
@@ -98,7 +98,7 @@ std::pair<Node*, Node*> find_max_min_ratio_nodes(Node*& root, double max_ratio, 
     return { max_result, min_result };
 }
 
-// т√тюф фхЁхтр т ъюэёюы№, ъюЁэхь ъюЄюЁюую  ты хЄё  яхЁхфрээ√щ т ЇєэъЎш■ єърчрЄхы№ эр єчхы
+// вывод дерева в консоль, корнем которого является переданный в функцию указатель на узел
 void print_tree(const std::string& prefix, Node*& node, bool isLeft) {
     if (node) {
         std::cout << prefix << (isLeft ? "|--" : "|__") << node->value << std::endl;
@@ -107,7 +107,7 @@ void print_tree(const std::string& prefix, Node*& node, bool isLeft) {
     }
 }
 
-// т√тюф фхЁхтр т ъюэёюы№ яю чрфрээюьє Їрщыє
+// вывод дерева в консоль по заданному файлу
 Node* create_custom_tree(std::ifstream& tree_file, int is_left, int is_right) {
     std::string node_line;
     std::getline(tree_file, node_line);
@@ -126,7 +126,7 @@ Node* create_custom_tree(std::ifstream& tree_file, int is_left, int is_right) {
 void generate_file(const std::string& filename, int count) {
     std::ofstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "═хтючьюцэю юЄъЁ√Є№ Їрщы " << filename << std::endl;
+        std::cerr << "Невозможно открыть файл " << filename << std::endl;
         return;
     }
 
@@ -145,10 +145,10 @@ int main() {
 
     Node* root = nullptr;
     
-    std::cout << "\t\t\t\t----------- ╚эЇюЁьрЎш  яю яЁюуЁрььх -----------\n\n"
-              << "─ы  ЁрсюЄ√ ё фхЁхтюь т√схЁхЄх ёяюёюс хую ёючфрэш :\n\n"
-              << "1 - яЁюшчтюы№эюх яюёЄЁюхэшх яю чрфрээюьє ъюы-тє єчыют\n"
-              << "2 - яюёЄЁюхэшх яю чрфрээюьє °рсыюэє ё ъюэъЁхЄэ√ьш тхЁ°шэрьш\n";
+    std::cout << "\t\t\t\t----------- Информация по программе -----------\n\n"
+              << "Для работы с деревом выберете способ его создания:\n\n"
+              << "1 - произвольное построение по заданному кол-ву узлов\n"
+              << "2 - построение по заданному шаблону с конкретными вершинами\n";
 
     int choice = 0;
     std::cin >> choice;
@@ -156,12 +156,12 @@ int main() {
     int counts_of_nodes = 0;
 
     if (choice == 1) {
-        std::cout << "╙ърцшЄх ъюы-тю ёючфртрхь√ї єчыют: ";
+        std::cout << "Укажите кол-во создаваемых узлов: ";
         std::cin >> counts_of_nodes;
 
         file_name = "num" + std::to_string(counts_of_nodes) + ".txt";
         generate_file(file_name, counts_of_nodes);
-        std::cout << "\n╘рщы ёюїЁрэхэ ё шьхэхь " << file_name << ".\n";
+        std::cout << "\nФайл сохранен с именем " << file_name << ".\n";
 
         std::ifstream in_file(file_name);
         int num = 0;
@@ -169,9 +169,9 @@ int main() {
         print_tree("", root, false);
     }
     else if (choice == 2) {
-        std::cout << "┬тхфшЄх ърцф√щ єчхы эр эютющ ёЄЁюъх т ЇюЁьрЄх val lc rc, уфх\n"
-                  << "val - чэрўхэшх єчыр, lc(rc) = 1, хёыш ыхт√щ(яЁрт√щ) яюЄюьюъ\nхёЄ№ ш 0 т яЁюЄштэюь ёыєўрх\n\n"
-                  << "*ёючфрэшх фхЁхтр юёє∙хёЄты хЄё  т яЁ ьюь яюЁ фъх*" 
+        std::cout << "Введите каждый узел на новой строке в формате val lc rc, где\n"
+                  << "val - значение узла, lc(rc) = 1, если левый(правый) потомок\nесть и 0 в противном случае\n\n"
+                  << "*создание дерева осуществляется в прямом порядке*" 
                   << std::endl;
 
         std::string node_line;
@@ -189,12 +189,12 @@ int main() {
             custom << node << std::endl;
         }
 
-        std::cout << "\n╘рщы ёюїЁрэхэ ё шьхэхь custom_1.txt" << ".\n";
+        std::cout << "\nФайл сохранен с именем custom_1.txt" << ".\n";
         std::ifstream custom1("custom_1.txt");
         root = create_custom_tree(custom1, 0, 0);
     }
     else {
-        std::cout << "═хъюЁЁхъЄэ√щ ттюф, яЁюуЁрььр чртхЁ°хэр";
+        std::cout << "Некорректный ввод, программа завершена";
         return -1;
     }
 
@@ -204,19 +204,19 @@ int main() {
 
     auto execution_time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
 
-    std::printf("┬Ёхь  т√яюыэхэш  рыуюЁшЄьр фы  %d єчыют: ", counts_of_nodes);
-    std::cout << execution_time << " ьъё." << std::endl;
+    std::printf("Время выполнения алгоритма для %d узлов: ", counts_of_nodes);
+    std::cout << execution_time << " мкс." << std::endl;
     
 
     Node* max_root = find_max_min_ratio_nodes(root, result.first, result.second).first;
     Node* min_root = find_max_min_ratio_nodes(root, result.first, result.second).second;
 
     
-    std::cout << "╠ръёшьры№эюх ёююЄэю°хэшх: " << result.first << "\n╠шэшьры№эюх ёююЄэю°хэшх: " << result.second << std::endl;
-    std::cout << "╧юффхЁхтю ё ьръёшьры№э√ь ёююЄэю°хэшхь:" << std::endl;
+    std::cout << "Максимальное соотношение: " << result.first << "\nМинимальное соотношение: " << result.second << std::endl;
+    std::cout << "Поддерево с максимальным соотношением:" << std::endl;
     print_tree("", max_root, false);
 
-    std::cout << "╧юффхЁхтю ё ьшэшьры№э√ь ёююЄэю°хэшхь:" << std::endl;
+    std::cout << "Поддерево с минимальным соотношением:" << std::endl;
     print_tree("", min_root, false);
 
     clear_tree(root);
